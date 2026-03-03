@@ -282,21 +282,31 @@ const columns = columnsConfig.map(col =>
     : columnHelper.accessor(col.accessor as any, { header: col.header })
 )
 
+
+const ITEMS_PER_PAGE = 10;
+
 const InventoryPage = () => {
-  const dispatch = useAppDispatch()
-  const { selectedId } = useAppSelector((state) => state.inventory)
+  const dispatch = useAppDispatch();
+  const { selectedId } = useAppSelector((state) => state.inventory);
+
+  const [page, setPage] = React.useState(1);
+  const totalPages = Math.ceil(sampleData.length / ITEMS_PER_PAGE);
+  const paginatedData = React.useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return sampleData.slice(start, start + ITEMS_PER_PAGE);
+  }, [page]);
 
   const table = useReactTable({
-    data: sampleData,
+    data: paginatedData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {},
-  })
+  });
 
   return (
     <div className="inventory-page">
       {/* KPI Row */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-4">
         <div className="inventory-card">
           <div className="text-sm text-gray-500">TOTAL STOCK UNITS</div>
           <div className="inventory-kpi">3,665</div>
@@ -312,52 +322,73 @@ const InventoryPage = () => {
       </div>
 
       {/* Main Table */}
-      <div className="inventory-card">
-        <table className="inventory-table">
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map(row => (
-              <React.Fragment key={row.id}>
-                <tr
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    dispatch(
-                      setSelectedId(
-                        selectedId === row.original.id ? null : row.original.id
-                      )
-                    )
-                  }
-                >
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
+      <div className="inventory-card" style={{ paddingBottom: 0 }}>
+        <div className="inventory-table-wrapper">
+          <table className="inventory-table">
+            <thead>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id} colSpan={header.colSpan}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
                   ))}
                 </tr>
-                {selectedId === row.original.id && (
-                  <tr>
-                    <td colSpan={columns.length}>
-                      <InventoryExpand item={row.original} />
-                    </td>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map(row => (
+                <React.Fragment key={row.id}>
+                  <tr
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      dispatch(
+                        setSelectedId(
+                          selectedId === row.original.id ? null : row.original.id
+                        )
+                      )
+                    }
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+                  {selectedId === row.original.id && (
+                    <tr>
+                      <td colSpan={columns.length}>
+                        <div style={{ maxHeight: 250, overflowY: "auto" }}>
+                          <InventoryExpand item={row.original} />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="pagination-footer">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            style={{ padding: "4px 12px", borderRadius: 4, border: "1px solid #ccc", background: page === 1 ? "#eee" : "#fff", cursor: page === 1 ? "not-allowed" : "pointer" }}
+          >
+            Prev
+          </button>
+          <span>Page {page} of {totalPages}</span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            style={{ padding: "4px 12px", borderRadius: 4, border: "1px solid #ccc", background: page === totalPages ? "#eee" : "#fff", cursor: page === totalPages ? "not-allowed" : "pointer" }}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default InventoryPage

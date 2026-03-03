@@ -54,6 +54,9 @@ body {
 
 .inventory-page {
   padding: 24px;
+  overflow: hidden;
+  min-height: 100vh;
+  max-height: 100vh;
 }
 
 .inventory-card {
@@ -61,6 +64,7 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 16px;
+  position: relative;
 }
 
 .inventory-kpi {
@@ -73,17 +77,22 @@ body {
   border-collapse: collapse;
 }
 
+.inventory-table-wrapper {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
 .inventory-table th {
   background: #f1f5f9;
   font-size: 13px;
   text-transform: uppercase;
-  padding: 12px;
+  padding: 14px 8px;
   text-align: left;
   color: #64748b;
 }
 
 .inventory-table td {
-  padding: 14px 12px;
+  padding: 10px 8px;
   border-bottom: 1px solid #e2e8f0;
   font-size: 14px;
 }
@@ -116,6 +125,21 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.pagination-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--card-bg);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0 0 0;
 }
 
 .expand-card {
