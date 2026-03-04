@@ -5,7 +5,7 @@ import DashboardPage from "../pages/DashboardPage"
 import InventoryPage from "../pages/InventoryPage"
 import BrandPage from "../pages/BrandPage"
 import SupplierPage from "../pages/SupplierPage"
-import CustomerPage from "../pages/CustomerPage"
+import CustomerReportPage from "../pages/CustomerReportPage"
 import OfferPage from "../pages/OfferPage"
 import NotFoundPage from "../pages/NotFoundPage"
  
@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
     path: "/customers",
     element: <AppLayout />, 
     children: [
-      { index: true, element: <CustomerPage /> },
+      { index: true, element: <CustomerReportPage /> },
     ]
   },
   {
