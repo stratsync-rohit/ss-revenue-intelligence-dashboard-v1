@@ -62,8 +62,8 @@ const InventoryExpand: React.FC<InventoryExpandProps> = ({ item }) => {
       <div className="grid grid-cols-2 gap-4">
 
         {/* SUPPLIER */}
-        <div className="bg-white border rounded-xl p-4">
-
+        <div className="bg-white border border-gray-300 rounded-xl p-4">
+    
           <div className="flex items-center gap-2 mb-4">
             <Truck size={18} className="text-gray-500"/>
             <h3 className="text-sm font-semibold tracking-wide text-gray-600">
@@ -96,7 +96,7 @@ const InventoryExpand: React.FC<InventoryExpandProps> = ({ item }) => {
             </div>
           </div>
 
-          <hr className="my-4"/>
+          <hr className="my-4 text-gray-300"/>
 
           <h4 className="text-xs text-gray-400 tracking-wide mb-3">
             SKU-LEVEL FROM SUPPLIER
@@ -140,7 +140,7 @@ const InventoryExpand: React.FC<InventoryExpandProps> = ({ item }) => {
 
 
         {/* KEY CUSTOMERS */}
-        <div className="bg-white border rounded-xl p-4">
+        <div className="bg-white border rounded-xl p-4  border-gray-300">
 
           <div className="flex items-center gap-2 mb-4">
             <Users size={18} className="text-gray-500"/>
@@ -169,7 +169,7 @@ const InventoryExpand: React.FC<InventoryExpandProps> = ({ item }) => {
 
 
       {/* QUARTERLY STOCK HISTORY */}
-      <div className="bg-white border rounded-xl p-4">
+      <div className="bg-white border border-gray-300 rounded-xl p-4">
 
         <div className="flex items-center gap-2 mb-3">
           <History size={18} className="text-gray-500"/>
@@ -219,7 +219,7 @@ const InventoryExpand: React.FC<InventoryExpandProps> = ({ item }) => {
 
 
       {/* STOCK BREAKDOWN */}
-      <div className="bg-white border rounded-xl p-4">
+      <div className="bg-white border border-gray-300 rounded-xl p-4">
 
         <div className="flex justify-between mb-4">
           <h3 className="text-sm font-semibold tracking-wide text-gray-600">
