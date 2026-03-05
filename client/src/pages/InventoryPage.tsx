@@ -9,6 +9,7 @@ import { FileText, Download, ChevronDown } from "lucide-react";
 
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react"
 import InventoryExpand from "./InventoryExpand"
+import ItemsToCover from "../components/Inventory/ItemsToCover";
 
 /* ================== TYPE ================== */
 
@@ -139,8 +140,28 @@ const columns = [
 const ITEMS_PER_PAGE = 10
 
 const InventoryPage = () => {
+    // Top stats data array
+  const topStats = [
+  {
+    label: "TOTAL STOCK UNITS",
+    value: "3,665",
+    valueClass: "",
+  },
+  {
+    label: "TRUE AVAILABLE",
+    value: "3,760",
+    valueClass: "",
+  },
+  {
+    label: "AVG HOLDING PERIOD",
+    value: "59d",
+    valueClass: "text-orange-500",
+  },
+];
+
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const [page, setPage] = React.useState(1)
+  const [offerDropdownOpen, setOfferDropdownOpen] = React.useState(false)
 
   const totalPages = Math.ceil(sampleData.length / ITEMS_PER_PAGE)
 
@@ -157,10 +178,10 @@ const InventoryPage = () => {
 
   return (
     <div className=" space-y-6">
-    <div className="w-full bg-white border-b px-6 py-4 flex items-center justify-between">
+    <div className="w-full border-b py-2 flex items-center justify-between">
 
       {/* Left Section */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center">
         <div className="p-2 rounded-lg bg-gray-100">
           <FileText className="w-5 h-5 text-gray-600" />
         </div>
@@ -172,15 +193,45 @@ const InventoryPage = () => {
       {/* Right Section */}
       <div className="flex items-center gap-3">
 
-        {/* Generate Offer Button */}
-        <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-lg transition">
-          <FileText className="w-4 h-4 text-gray-700" />
-          Generate Offer
-          <ChevronDown className="w-4 h-4 text-gray-600" />
-        </button>
+
+        {/* Generate Offer Button with Dropdown */}
+        <div className="relative">
+          <button
+            className="flex items-center gap-2 px-4 py-1  border-gray-300 border bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-lg transition cursor-pointer"
+            onClick={() => setOfferDropdownOpen((prev) => !prev)}
+            type="button"
+          >
+            <FileText className="w-4 h-4 text-gray-700" />
+            Generate Offer
+            <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${offerDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <div
+            className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition-all duration-200 transform ${offerDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-3 pointer-events-none'}`}
+            style={{ willChange: 'opacity, transform' }}
+          >
+            <button
+              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+              onClick={() => setOfferDropdownOpen(false)}
+            >
+              Stock only
+            </button>
+            <button
+              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+              onClick={() => setOfferDropdownOpen(false)}
+            >
+              Stock + consignment
+            </button>
+            <button
+              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+              onClick={() => setOfferDropdownOpen(false)}
+            >
+              Stock + consignment + POs
+            </button>
+          </div>
+        </div>
 
         {/* Export Button */}
-        <button className="flex items-center gap-2 px-4 py-2 border text-sm font-medium rounded-lg hover:bg-gray-50 transition">
+        <button className="flex items-center gap-2 px-4 py-1 border text-sm font-medium border-gray-300 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
           <Download className="w-4 h-4 text-gray-700" />
           Export
         </button>
@@ -191,137 +242,21 @@ const InventoryPage = () => {
        <div className="space-y-6">
 
       {/* ====== TOP STATS ====== */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         
-        {/* Total Stock */}
-        <div className="bg-white border rounded-xl p-6">
-          <p className="text-sm text-gray-500 tracking-wide">
-            TOTAL STOCK UNITS
-          </p>
-          <h2 className="text-4xl font-semibold mt-2">3,665</h2>
-        </div>
-
-        {/* True Available */}
-        <div className="bg-white border rounded-xl p-6">
-          <p className="text-sm text-gray-500 tracking-wide">
-            TRUE AVAILABLE
-          </p>
-          <h2 className="text-4xl font-semibold mt-2">3,760</h2>
-        </div>
-
-        {/* Avg Holding */}
-        <div className="bg-white border rounded-xl p-6">
-          <p className="text-sm text-gray-500 tracking-wide">
-            AVG HOLDING PERIOD
-          </p>
-          <h2 className="text-4xl font-semibold mt-2 text-orange-500">
-            59d
-          </h2>
-        </div>
-      </div>
-
-      {/* ====== ITEMS TO COVER / BUY ====== */}
-      <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6 space-y-4">
-
-        <h3 className="text-orange-600 font-semibold tracking-wide">
-          ITEMS TO COVER / BUY
-        </h3>
-
-        <div className="bg-white border rounded-xl overflow-hidden">
-          
-          {/* Table Header */}
-          <div className="grid grid-cols-5 bg-gray-100 px-6 py-3 text-sm font-medium text-gray-600">
-            <div>SKU</div>
-            <div>Description</div>
-            <div>Net Position</div>
-            <div>To Buy</div>
-            <div>SO Expiry Alert</div>
-          </div>
-
-          {/* Row 1 */}
-          <div className="grid grid-cols-5 px-6 py-4 border-t items-center">
-            <div className="font-medium">CD-SAU-50</div>
-            <div>Sauvage EDT 50ml</div>
-            <div className="text-red-600 font-semibold">-270</div>
-            <div className="text-red-600 font-semibold">270</div>
-            <div>
-              <span className="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full">
-                ORD-5501 · 400u · EXPIRED
-              </span>
+          {topStats.map((stat) => (
+            <div key={stat.label} className="bg-white border border-gray-300 rounded-xl p-3">
+              <p className="text-xs text-gray-500 tracking-wide">{stat.label}</p>
+              <h2 className={`text-2xl font-semibold mt-1 ${stat.valueClass}`}>{stat.value}</h2>
             </div>
-          </div>
-
-          {/* Row 2 */}
-          <div className="grid grid-cols-5 px-6 py-4 border-t items-center">
-            <div className="font-medium">HB-BTL-50</div>
-            <div>Boss Bottled EDT 50ml</div>
-            <div className="text-red-600 font-semibold">-320</div>
-            <div className="text-red-600 font-semibold">320</div>
-            <div className="text-gray-400">—</div>
-          </div>
-
-        </div>
+          ))}
       </div>
 
-      {/* ====== COVERED BUT EXPIRING ====== */}
-      <div className="space-y-4">
 
-        <h3 className="text-gray-500 font-semibold tracking-wide">
-          COVERED BUT WITH EXPIRING SOs — VALIDATE WITH CUSTOMER
-        </h3>
+       <ItemsToCover />
 
-        {/* Item 1 */}
-        <div className="flex justify-between items-center bg-white border rounded-xl p-4">
-          <div>
-            <span className="font-medium">CD-SAU-30</span>
-            <span className="ml-3 text-gray-600">
-              Sauvage EDT 30ml
-            </span>
-            <span className="ml-3 text-green-600 font-medium">
-              Net: +775
-            </span>
-          </div>
-
-          <span className="bg-orange-100 text-orange-600 text-xs px-3 py-1 rounded-full">
-            ORD-5510 · Rivoli Group · 250u · EXPIRING
-          </span>
-        </div>
-
-        {/* Item 2 */}
-        <div className="flex justify-between items-center bg-white border rounded-xl p-4">
-          <div>
-            <span className="font-medium">BV-AQA-30</span>
-            <span className="ml-3 text-gray-600">
-              Aqva Pour Homme 30ml
-            </span>
-            <span className="ml-3 text-green-600 font-medium">
-              Net: +460
-            </span>
-          </div>
-
-          <span className="bg-orange-100 text-orange-600 text-xs px-3 py-1 rounded-full">
-            ORD-5515 · Faces Beauty Stores · 180u · EXPIRING
-          </span>
-        </div>
-
-        {/* Item 3 */}
-        <div className="flex justify-between items-center bg-white border rounded-xl p-4">
-          <div>
-            <span className="font-medium">HB-BTL-100</span>
-            <span className="ml-3 text-gray-600">
-              Boss Bottled EDT 100ml
-            </span>
-            <span className="ml-3 text-green-600 font-medium">
-              Net: +350
-            </span>
-          </div>
-
-          <span className="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full">
-            ORD-5502 · Paris Gallery LLC · 120u · EXPIRED
-          </span>
-        </div>
-
-      </div>
+      
+     
     </div>
       <div className="bg-white rounded-xl shadow-sm">
         <table className="w-full">

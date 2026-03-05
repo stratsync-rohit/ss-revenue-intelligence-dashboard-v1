@@ -1,4 +1,10 @@
+
 @import "tailwindcss";
+
+/* Global border color utility */
+.border-gray {
+  border-color: #d1d5db !important;
+}
 
 
 /* =========================
