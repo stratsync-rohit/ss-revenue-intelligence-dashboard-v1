@@ -48,18 +48,18 @@ const Sidebar = () => {
         className={`sidebar fixed top-0 left-0 h-screen overflow-y-auto ${iconOnly ? "w-16" : "w-64 md:w-80"} bg-white dark:bg-gray-900 shadow-lg z-50 flex flex-col justify-between p-5 transition-all duration-300 md:static md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"} md:flex md:h-screen`}
         style={{ maxWidth: iconOnly ? 84 : 240 }}
       >
-        {/* Close button for mobile */}
+        {/* Close button for mobile (moved to right side) */}
         <button
-          className="md:hidden absolute top-8 right-4 z-50 bg-white/80 rounded-full p-1 shadow"
+          className="md:hidden absolute top-4 right-4 z-50 bg-white/80 rounded-full p-1 shadow"
           onClick={() => setOpen(false)}
           aria-label="Close sidebar"
         >
-          <CloseIcon size={16} />
+          <CloseIcon size={20} />
         </button>
 
         {/* Toggle icon-only button */}
         <button
-          className="absolute top-4 left-4 z-50  dark:bg-gray-800 rounded-full p-1  md:block hidden"
+          className="absolute top-3 right-3 z-50  dark:bg-gray-800 rounded-full p-1  md:block hidden"
           onClick={() => setIconOnly((prev) => !prev)}
           aria-label={iconOnly ? "Expand sidebar" : "Collapse sidebar"}
         >
@@ -70,7 +70,7 @@ const Sidebar = () => {
         <div className="flex flex-col flex-1">
           {/* Logo Section */}
           <div className="mb-10 flex items-center justify-center">
-            <MenuIcon size={28} className={`transition-all duration-300 ${iconOnly ? "" : "hidden"}`} />
+          
             <div className={`transition-all duration-300 ${iconOnly ? "hidden" : "block"}`}>
               <h2 className="text-xl font-semibold tracking-wide">{client.name}</h2>
               <p className="text-xs opacity-60">{client.label}</p>
