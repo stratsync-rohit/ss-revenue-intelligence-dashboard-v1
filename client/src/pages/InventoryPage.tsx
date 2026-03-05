@@ -8,53 +8,88 @@ import {
 import { FileText, Download, ChevronDown } from "lucide-react";
 
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react"
-import InventoryExpand from "./InventoryExpand"
+import StatusBadge from "../components/StatusBadge";
+import InventoryExpand from "../components/Inventory/InventoryExpand";
+import InventoryTable from "../components/Inventory/InventoryTable";
+import InventoryPagination from "../components/Inventory/InventoryPagination";
+
 import ItemsToCover from "../components/Inventory/ItemsToCover";
 
 /* ================== TYPE ================== */
 
-export interface InventoryItem {
-  id: string
-  sku: string
-  description: string
-  warehouse: string
-  onHand: number
-  trueAvail: number
-  age: number
-  status: string
-  supplierInfo: {
-    reliability: string
-    pendingPOsValue: string
-    lastCost: string
-    receivedValue: string
-    volume: number
-    avgCost: string
-    costDelta: string
-    skuPendingPO: string
-    skuReceived: string
-  }
-  keyCustomers: {
-    name: string
-    qty: number
-    value: string
-    holdDays: string
-  }[]
-  quarterlyHistory: {
-    quarter: string
-    stockOnHand: number
-    consignment: number
-    poPipeline: number
-    pendingOrders: number
-    salesQty: number
-  }[]
-  avgHoldingDays: number
-}
+import type { InventoryItem } from "../types/inventory";
 
 /* ================== SAMPLE DATA ================== */
 
 const sampleData: InventoryItem[] = [
   {
     id: "1",
+    sku: "CD-SAU-30",
+    description: "Sauvage EDT 30ml",
+    warehouse: "Dubai Main",
+    onHand: 540,
+    trueAvail: 575,
+    age: 8,
+    status: "Good",
+    supplierInfo: {
+      reliability: "High",
+      pendingPOsValue: "$120,000",
+      lastCost: "$95",
+      receivedValue: "$80,000",
+      volume: 1200,
+      avgCost: "$92",
+      costDelta: "-3%",
+      skuPendingPO: "350 units",
+      skuReceived: "500 units"
+    },
+    keyCustomers: [
+      {
+        name: "Duty Free DXB",
+        qty: 1200,
+        value: "$280,000",
+        holdDays: "6d hold"
+      },
+      {
+        name: "Rivoli Group",
+        qty: 700,
+        value: "$174,000",
+        holdDays: "10d hold"
+      },
+      {
+        name: "Al Shaya Perfumes",
+        qty: 400,
+        value: "$110,000",
+        holdDays: "10d hold"
+      },
+      {
+        name: "Paris Gallery LLC",
+        qty: 400,
+        value: "$38,000",
+        holdDays: "12 days"
+      }
+    ],
+    quarterlyHistory: [
+      {
+        quarter: "Q1 2024",
+        stockOnHand: 480,
+        consignment: 50,
+        poPipeline: 200,
+        pendingOrders: 90,
+        salesQty: 620
+      },
+      {
+        quarter: "Q2 2024",
+        stockOnHand: 520,
+        consignment: 60,
+        poPipeline: 180,
+        pendingOrders: 70,
+        salesQty: 710
+      }
+    ],
+    avgHoldingDays: 18
+  },
+  {
+    id: "2",
     sku: "CD-SAU-30",
     description: "Sauvage EDT 30ml",
     warehouse: "Dubai Main",
@@ -117,20 +152,8 @@ const columns = [
   columnHelper.accessor("status", {
     header: "Status",
     cell: (info) => {
-      const status = info.getValue()
-      return (
-        <span
-          className={`px-2 py-1 rounded text-xs font-medium ${
-            status === "Good"
-              ? "bg-green-100 text-green-700"
-              : status === "Watch"
-              ? "bg-yellow-100 text-yellow-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {status}
-        </span>
-      )
+      const status = info.getValue() as "Good" | "Watch" | "Alert";
+      return <StatusBadge status={status} />;
     }
   })
 ]
@@ -259,77 +282,17 @@ const InventoryPage = () => {
      
     </div>
       <div className="bg-white rounded-xl shadow-sm">
-        <table className="w-full">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="text-left p-3 border-b">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <React.Fragment key={row.id}>
-                <tr
-                  className="cursor-pointer hover:bg-gray-50"
-                  onClick={() =>
-                    setSelectedId(
-                      selectedId === row.original.id
-                        ? null
-                        : row.original.id
-                    )
-                  }
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-3 border-b">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-
-                {selectedId === row.original.id && (
-                  <tr>
-                    <td colSpan={columns.length}>
-                      <InventoryExpand item={row.original} />
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Pagination */}
-        <div className="flex justify-between items-center p-4">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-          >
-            <ArrowLeft />
-          </button>
-
-          <span>
-            Page {page} of {totalPages}
-          </span>
-
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-          >
-            <ArrowRight />
-          </button>
-        </div>
+        <InventoryTable
+          table={table}
+          columns={columns}
+          selectedId={selectedId}
+          setSelectedId={setSelectedId}
+        />
+        <InventoryPagination
+          page={page}
+          totalPages={totalPages}
+          setPage={setPage}
+        />
       </div>
     </div>
   )
