@@ -8,23 +8,25 @@ interface InventoryPaginationProps {
 }
 
 const InventoryPagination: React.FC<InventoryPaginationProps> = ({ page, totalPages, setPage }) => (
-  <div className="flex justify-center items-center p-4 gap-4">
+  <div className="flex justify-center items-center p-2 gap-2 sm:gap-4 w-full text-xs sm:text-sm">
     <button
       onClick={() => setPage((p) => Math.max(1, p - 1))}
       disabled={page === 1}
-      className="disabled:opacity-50"
+      className="disabled:opacity-50 px-2 py-1 sm:px-3 sm:py-2 rounded focus:outline-none focus:ring"
+      aria-label="Previous page"
     >
-      <ArrowLeft />
+      <ArrowLeft size={18} />
     </button>
-    <span>
+    <span className="mx-2">
       Page {page} of {totalPages}
     </span>
     <button
       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
       disabled={page === totalPages}
-      className="disabled:opacity-50"
+      className="disabled:opacity-50 px-2 py-1 sm:px-3 sm:py-2 rounded focus:outline-none focus:ring"
+      aria-label="Next page"
     >
-      <ArrowRight />
+      <ArrowRight size={18} />
     </button>
   </div>
 );

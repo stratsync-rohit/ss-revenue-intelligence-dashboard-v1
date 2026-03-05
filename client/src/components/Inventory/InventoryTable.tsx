@@ -18,8 +18,8 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
   selectedId,
   setSelectedId,
 }) => (
-  <div className="rounded-lg border border-gray-300  overflow-hidden">
-    <table className="w-full text-xs">
+  <div className="rounded-lg border border-gray-300 overflow-x-auto overflow-y-visible w-full">
+    <table className="min-w-[700px] w-full text-xs md:text-sm">
       {/* HEADER */}
       <thead className="bg-gray-100 border border-gray-300 text-gray-600">
         {table.getHeaderGroups().map((headerGroup: any) => (

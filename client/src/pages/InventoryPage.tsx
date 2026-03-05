@@ -164,7 +164,7 @@ const ITEMS_PER_PAGE = 10
 
 const InventoryPage = () => {
     // Top stats data array
-  const topStats = [
+    const topStats = [
   {
     label: "TOTAL STOCK UNITS",
     value: "3,665",
@@ -200,87 +200,73 @@ const InventoryPage = () => {
   })
 
   return (
-    <div className=" space-y-6">
-    <div className="w-full border-b py-2 flex items-center justify-between">
-
-      {/* Left Section */}
-      <div className="flex items-center">
-        <div className="p-2 rounded-lg bg-gray-100">
-          <FileText className="w-5 h-5 text-gray-600" />
-        </div>
-        <h1 className="text-xl font-semibold text-gray-800">
-          Inventory Report
-        </h1>
-      </div>
-
-      {/* Right Section */}
-      <div className="flex items-center gap-3">
-
-
-        {/* Generate Offer Button with Dropdown */}
-        <div className="relative">
-          <button
-            className="flex items-center gap-2 px-4 py-1  border-gray-300 border bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-lg transition cursor-pointer"
-            onClick={() => setOfferDropdownOpen((prev) => !prev)}
-            type="button"
-          >
-            <FileText className="w-4 h-4 text-gray-700" />
-            Generate Offer
-            <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${offerDropdownOpen ? 'rotate-180' : ''}`} />
-          </button>
-          <div
-            className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition-all duration-200 transform ${offerDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-3 pointer-events-none'}`}
-            style={{ willChange: 'opacity, transform' }}
-          >
-            <button
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
-              onClick={() => setOfferDropdownOpen(false)}
-            >
-              Stock only
-            </button>
-            <button
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
-              onClick={() => setOfferDropdownOpen(false)}
-            >
-              Stock + consignment
-            </button>
-            <button
-              className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
-              onClick={() => setOfferDropdownOpen(false)}
-            >
-              Stock + consignment + POs
+    <div className="w-full max-w-[1400px] mx-auto px-2 sm:px-4 md:px-8 py-2 md:py-6 flex flex-col gap-4">
+      <div className="space-y-6">
+        <div className="w-full border-b py-2 flex items-center justify-between">
+          {/* Left Section */}
+          <div className="flex items-center">
+            <div className="p-2 rounded-lg bg-gray-100">
+              <FileText className="w-5 h-5 text-gray-600" />
+            </div>
+            <h1 className="text-xl font-semibold text-gray-800">
+              Inventory Report
+            </h1>
+          </div>
+          {/* Right Section */}
+          <div className="flex items-center gap-3">
+            {/* Generate Offer Button with Dropdown */}
+            <div className="relative">
+              <button
+                className="flex items-center gap-2 px-4 py-1  border-gray-300 border bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-lg transition cursor-pointer"
+                onClick={() => setOfferDropdownOpen((prev) => !prev)}
+                type="button"
+              >
+                <FileText className="w-4 h-4 text-gray-700" />
+                Generate Offer
+                <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform ${offerDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <div
+                className={`absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition-all duration-200 transform ${offerDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-3 pointer-events-none'}`}
+                style={{ willChange: 'opacity, transform' }}
+              >
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+                  onClick={() => setOfferDropdownOpen(false)}
+                >
+                  Stock only
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+                  onClick={() => setOfferDropdownOpen(false)}
+                >
+                  Stock + consignment
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm transition-colors duration-150 cursor-pointer"
+                  onClick={() => setOfferDropdownOpen(false)}
+                >
+                  Stock + consignment + POs
+                </button>
+              </div>
+            </div>
+            {/* Export Button */}
+            <button className="flex items-center gap-2 px-4 py-1 border text-sm font-medium border-gray-300 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+              <Download className="w-4 h-4 text-gray-700" />
+              Export
             </button>
           </div>
         </div>
-
-        {/* Export Button */}
-        <button className="flex items-center gap-2 px-4 py-1 border text-sm font-medium border-gray-300 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
-          <Download className="w-4 h-4 text-gray-700" />
-          Export
-        </button>
-
-      </div>
-    </div>
-
-       <div className="space-y-6">
-
-      {/* ====== TOP STATS ====== */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
+        {/* ====== TOP STATS ====== */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {topStats.map((stat) => (
             <div key={stat.label} className="bg-white border border-gray-300 rounded-xl p-3">
               <p className="text-xs text-gray-500 tracking-wide">{stat.label}</p>
               <h2 className={`text-2xl font-semibold mt-1 ${stat.valueClass}`}>{stat.value}</h2>
             </div>
           ))}
+        </div>
+        <ItemsToCover />
       </div>
-
-
-       <ItemsToCover />
-
-      
-     
-    </div>
       <div className="bg-white rounded-xl shadow-sm">
         <InventoryTable
           table={table}
@@ -295,7 +281,7 @@ const InventoryPage = () => {
         />
       </div>
     </div>
-  )
+  );
 }
 
 export default InventoryPage
