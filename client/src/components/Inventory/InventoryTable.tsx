@@ -1,4 +1,5 @@
 import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { flexRender } from "@tanstack/react-table";
 import InventoryExpand from "./InventoryExpand";
 import type { InventoryItem } from "../../types/inventory";
@@ -24,12 +25,12 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
       <thead className="bg-gray-100 border border-gray-300 text-gray-600">
         {table.getHeaderGroups().map((headerGroup: any) => (
           <tr key={headerGroup.id}>
-            <th className="w-8 p-0 border-b border-gray-300"></th>
+            <th className="w-8 p-0 border-b"></th>
 
             {headerGroup.headers.map((header: any) => (
               <th
                 key={header.id}
-                className="text-left font-medium px-2 py-2 border-b"
+                className="text-left font-medium px-2 py-2 border-b "
               >
                 {flexRender(
                   header.column.columnDef.header,
@@ -48,7 +49,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         {table.getRowModel().rows.map((row: any) => (
           <React.Fragment key={row.id}>
             <tr
-              className="hover:bg-gray-50 border-b border-gray-300 transition cursor-pointer"
+              className="hover:bg-gray-50 border-b cursor-pointer border-gray-300 transition"
               onClick={() =>
                 setSelectedId(
                   selectedId === row.original.id ? null : row.original.id
@@ -82,13 +83,25 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
             </tr>
 
             {/* Expanded Row */}
-            {selectedId === row.original.id && (
-              <tr>
-                <td colSpan={columns.length + 2} className="p-2">
-                  <InventoryExpand item={row.original} />
-                </td>
-              </tr>
-            )}
+            <AnimatePresence initial={false}>
+              {selectedId === row.original.id && (
+                <tr>
+                  <td colSpan={columns.length + 2} className="p-2 !border-b-0" style={{ padding: 0, background: 'transparent' }}>
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div className="p-2">
+                        <InventoryExpand item={row.original} />
+                      </div>
+                    </motion.div>
+                  </td>
+                </tr>
+              )}
+            </AnimatePresence>
           </React.Fragment>
         ))}
       </tbody>
