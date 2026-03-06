@@ -2,24 +2,20 @@ import React from "react"
 import {
   useReactTable,
   getCoreRowModel,
-  flexRender,
+
   createColumnHelper
 } from "@tanstack/react-table"
 import { FileText, Download, ChevronDown } from "lucide-react";
 
-import { ArrowLeft, ArrowRight } from "@phosphor-icons/react"
 import StatusBadge from "../components/StatusBadge";
-import InventoryExpand from "../components/Inventory/InventoryExpand";
+
 import InventoryTable from "../components/Inventory/InventoryTable";
-import InventoryPagination from "../components/Inventory/InventoryPagination";
+import PaginationControl from "../components/PaginationControl";
 
 import ItemsToCover from "../components/Inventory/ItemsToCover";
 
-/* ================== TYPE ================== */
-
 import type { InventoryItem } from "../types/inventory";
 
-/* ================== SAMPLE DATA ================== */
 
 const sampleData: InventoryItem[] = [
   {
@@ -274,7 +270,7 @@ const InventoryPage = () => {
           selectedId={selectedId}
           setSelectedId={setSelectedId}
         />
-        <InventoryPagination
+        <PaginationControl
           page={page}
           totalPages={totalPages}
           setPage={setPage}
